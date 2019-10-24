@@ -1,6 +1,0 @@
-<resources>
-    <string name="app_name">Almoxarifado DNIT AL</string>
-    <string name="title_activity_main2">Almoxarifado DNIT AL</string>
-    <string name="load_data">Carregar Base</string>
-    <string name="btn_barcode">Ler Código de Barra</string>
-</resources>
