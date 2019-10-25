@@ -1,6 +1,8 @@
 package br.dnit.al.wylken.almoxarifadodnital.dao;
 
 
+import java.util.List;
+
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -20,4 +22,7 @@ public interface SalaDAO {
 
     @Query("DELETE FROM sala")
     public void deleteAll();
+
+    @Query("Select nome from sala")
+    public List<String> getAll();
 }
