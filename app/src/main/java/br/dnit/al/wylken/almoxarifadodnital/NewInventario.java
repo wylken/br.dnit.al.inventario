@@ -67,6 +67,7 @@ public class NewInventario extends AppCompatActivity {
                 Intent intent = new Intent(activity, Inventario.class);
                 intent.putExtra("sala",sala);
                 startActivity(intent);
+                activity.finish();
             }
         });
 

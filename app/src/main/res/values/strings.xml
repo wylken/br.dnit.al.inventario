@@ -7,4 +7,6 @@
     <string name="btn_next">Continuar</string>
     <string name="edit_enter_patrimonio">Digite o Patrimônio</string>
     <string name="hint_sala">Digite Nova Sala</string>
+    <string name="consultar">Consultar Patrimônio</string>
+    <string name="btn_save">Salvar</string>
 </resources>

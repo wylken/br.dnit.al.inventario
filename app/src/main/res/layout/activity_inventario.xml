@@ -34,6 +34,27 @@
             android:text="@string/btn_barcode"
             android:layout_marginTop="10dp"/>
 
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/btn_consultar_patrimonio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/consultar" />
+
+        <View
+            android:id="@+id/divider2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider" />
+
+        <ListView
+            android:id="@+id/list_material_inventario"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

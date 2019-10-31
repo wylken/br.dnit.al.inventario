@@ -15,8 +15,10 @@ import com.opencsv.CSVReader;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.room.Room;
+import br.dnit.al.wylken.almoxarifadodnital.dao.InventarioDAO;
 import br.dnit.al.wylken.almoxarifadodnital.dao.MaterialDAO;
 import br.dnit.al.wylken.almoxarifadodnital.dao.SalaDAO;
+import br.dnit.al.wylken.almoxarifadodnital.models.InventarioModel;
 import br.dnit.al.wylken.almoxarifadodnital.models.Material;
 import br.dnit.al.wylken.almoxarifadodnital.models.Sala;
 
@@ -24,7 +26,9 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,8 +39,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button btnBarcode;
-    TextView textResult;
+    ListView listSalasIventario;
     final Activity activity= this;
 
     @Override
@@ -57,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
 
         componentesDaTela();
         eventoButton();
+
+        loadList();
 
         Stetho.initializeWithDefaults(this);
     }
@@ -81,21 +86,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void eventoButton() {
-        this.btnBarcode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                IntentIntegrator intentIntegrator = new IntentIntegrator(activity);
-                intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
-                intentIntegrator.setPrompt("SCAN");
-                intentIntegrator.setCameraId(0);
-                intentIntegrator.initiateScan();
-            }
-        });
+
     }
 
     private void componentesDaTela() {
-        this.btnBarcode = (Button)findViewById(R.id.btn_barcode);
-        this.textResult = (TextView)findViewById(R.id.text_result);
+        this.listSalasIventario = (ListView) findViewById(R.id.list_salas_inventario);
     }
 
     private void loadData(){
@@ -168,31 +163,24 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-        if(requestCode == 49374 && resultCode == RESULT_OK) {
-
-            IntentResult intentResult = IntentIntegrator.parseActivityResult(requestCode,resultCode,data);
-
-            if(intentResult != null){
-                if (intentResult.getContents() !=  null){
-
-                    MaterialDatabase materialDatabase = Room.databaseBuilder(this, MaterialDatabase.class, "mydb").allowMainThreadQueries().build();
-                    MaterialDAO materialDAO = materialDatabase.getMaterialDAO();
-                    //List<Material> materiais = materialDAO.getMateriais();
-                    String patrimonio = intentResult.getContents().toString();
-                    if(patrimonio.length() < 9){
-                        patrimonio = "0"+patrimonio;
-                    }
-                    List <Material> materiais = materialDAO.getByPatrimonio(patrimonio);
-                    textResult.setText(materiais.get(0).getDescricao());
-                    //textResult.setText(intentResult.getContents().toString());
-                }else{
-                    alert("Scan cancelado");
-                }
-            }
-        }
-
         else{
             alert(new Integer(requestCode).toString());
         }
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadList();
+    }
+
+    private void loadList() {
+        MaterialDatabase materialDatabase = Room.databaseBuilder(activity, MaterialDatabase.class, "mydb").allowMainThreadQueries().build();
+        InventarioDAO inventarioDAO = materialDatabase.getInventarioDAO();
+        List<String> salas = inventarioDAO.getDistinctSala();
+
+        ArrayAdapter<String> salasAdapter = new ArrayAdapter<String>(activity, android.R.layout.simple_list_item_1, salas);
+        this.listSalasIventario.setAdapter(salasAdapter);
+    }
+
 }
